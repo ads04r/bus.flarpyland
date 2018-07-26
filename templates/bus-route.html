@@ -1,0 +1,48 @@
+    <div class="container">
+
+      <div class="jumbotron">
+        <h1>{{ @page_data->label }}</h1>
+        <p class="lead">Bus route operated by {{ @page_data->operator()['name'] }} as part of the {{ @page_data->service()['link'] }} service.</p>
+      </div>
+
+	<div class="row">
+
+		<div class="col-md-12 col-lg-6">
+			<div class="card"><div class="card-body"><div id="osm_route_map" style="width: 100%; min-height: 320px;"></div></div></div>
+		</div>
+
+		<div class="col-md-12 col-lg-6">
+			<div class="list-group">
+
+				<repeat group="{{ @page_data->stops() }}" value="{{ @stop }}">
+
+				<a href="/bus-stop/{{ @stop->id }}.html" class="list-group-item list-group-item-action flex-row align-items-start d-flex">
+
+					<div class="p-2 d-none d-sm-flex"><img src="/bus-stop/{{ @stop->id }}.png" width="100" height="100"></div>
+					<div class="p-4">
+
+					<h4>{{ @stop->label }}</h4>
+					<p>{{ @stop->address }}</p>
+					</div>
+				</a>
+
+				</repeat>
+
+			</div>	
+
+		</div>
+	</div>
+
+    </div>
+
+<script language="JavaScript"><!--//
+
+var map = L.map('osm_route_map');
+L.tileLayer('/tile/{z}/{x}/{y}.png', {
+	attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, augmented with <a href="http://data.southampton.ac.uk/">University of Southampton Open Data</a>.',
+	maxZoom: 19
+}).addTo(map);
+var polyline = L.polyline({{ json_encode( @page_data->points() ) }}, {color: '#FF0000', weight:5, clickable:false}).addTo(map);
+map.fitBounds(polyline.getBounds());
+
+//--></script>

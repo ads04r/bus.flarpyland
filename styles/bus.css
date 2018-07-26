@@ -1,0 +1,21 @@
+body
+{
+	padding-top: 5em;
+
+	background-image: url(../graphics/background.jpg);
+	background-size: cover;
+	background-position: top center;
+	background-attachment: fixed;
+	background-repeat: no-repeat;
+	background-color: #000000;
+}
+
+.card
+{
+	margin-bottom: 1em;
+}
+
+@media screen and (max-width: 489px)
+{
+	.container { margin-top: 3em; }
+}

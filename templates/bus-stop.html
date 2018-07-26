@@ -1,0 +1,60 @@
+
+    <div class="container">
+
+      <div class="jumbotron">
+        <h1>{{ @page_data->label }}</h1>
+        <p class="lead">{{ @page_data->address }}</p>
+      </div>
+
+	<div class="row">
+
+		<div class="col-md-12 col-lg-6">
+			<div class="card"><div class="card-body"><div id="osm_route_map" style="width: 100%; min-height: 320px;"></div></div></div>
+			<div class="card" id="update-timer"><ul class="list-group">
+
+				<li class="list-group-item d-flex justify-content-between align-items-center list-group-item-dark">Upcoming buses</li>
+
+				<repeat group="{{ @stop_data }}" value="{{ @bus }}">
+					<li class="list-group-item d-flex justify-content-between align-items-center"><span>{{ @bus['name'] }}</span><span>To {{ @bus['dest'] }}</span><span class="badge badge-primary badge-pill">{{ @bus['time'] }}</span></li>
+				</repeat>
+			
+			</ul></div>
+		</div>
+
+		<div class="col-md-12 col-lg-6">
+			<div class="card"><div class="list-group">
+
+				<li class="list-group-item d-flex justify-content-between align-items-center list-group-item-dark">Routes through this stop</li>
+
+				<repeat group="{{ @page_data->routes() }}" value="{{ @route }}">
+
+					<a href="/bus-route/{{ @route->id }}.html" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"><span>{{ preg_replace("/^([^ ]+) (.*)$/", "$1</span><span>$2", @route->label) }}</span></a>
+
+				</repeat>
+
+			</div></div>
+
+		</div>
+	</div>
+
+<script language="JavaScript"><!--//
+
+var map = L.map('osm_route_map');
+
+var icon = L.icon({
+	iconUrl: '/graphics/bus.png',
+	iconSize: [32, 37],
+	iconAnchor: [16, 36],
+	popupAnchor: [16, 16]
+});
+
+L.tileLayer('/tile/{z}/{x}/{y}.png', {
+	attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, augmented with <a href="http://data.southampton.ac.uk/">University of Southampton Open Data</a> | <a href="https://maps.southampton.ac.uk/#19/{{ @page_data->latitude }}/{{ @page_data->longitude }}/nojump,bus" target="_top">View bigger map on maps.soton</a>',
+	maxZoom: 19
+}).addTo(map);
+var marker = L.marker([{{ @page_data->latitude }}, {{ @page_data->longitude }}], {icon: icon}).addTo(map);
+map.setView([{{ @page_data->latitude }}, {{ @page_data->longitude }}], 16);
+
+//--></script>
+
+    </div>

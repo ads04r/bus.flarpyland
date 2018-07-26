@@ -1,0 +1,30 @@
+    <div class="container">
+
+      <div class="jumbotron">
+        <h1>Service {{ @page_data->id }}</h1>
+        <p class="lead">Bus service operated by {{ @page_data->operator()['name'] }}.</p>
+      </div>
+
+	<div class="row">
+
+		<div class="col-md-12 col-lg-12">
+
+			<repeat group="{{ @page_data->routes() }}" value="{{ @route }}">
+
+			<check if="{{ count(@route->stops()) > 0 }}"><true>
+
+			<div class="card"><a href="/bus-route/{{ @route->id }}.html"><div class="card-body flex-row align-items-start d-flex">
+
+				<div class="p-2"><h4>{{ preg_replace("/^([^ ]+) (.*)$/", "$1", @route->label) }}</h4></div>
+				<div class="p-2">{{ preg_replace("/^([^ ]+) (.*)$/", "$2", @route->label) }}<br><small>{{ count(@route->stops()) }} stops | {{ @route->direction }}</small></div>
+
+			</div></a></div>
+
+			</true></check>
+
+			</repeat>
+
+		</div>
+	</div>
+
+    </div>
