@@ -1,0 +1,6 @@
+[submodule "lib/fatfree"]
+	path = lib/fatfree
+	url = git@github.com:bcosca/fatfree.git
+[submodule "lib/staticmaplite"]
+	path = lib/staticmaplite
+	url = git@github.com:dfacts/staticmaplite.git
