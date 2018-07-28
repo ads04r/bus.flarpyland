@@ -59,6 +59,12 @@ $f3->route("GET|HEAD /area/@areaid.html", function($f3, $params)
 	$f3->set('page_data', $f3->get('data')->area($params['areaid']));
 	echo Template::instance()->render("templates/index.html");
 });
+$f3->route("GET|HEAD /bus-routes.html", function($f3)
+{
+	$f3->set('template', 'bus-routes.html');
+	$f3->set('page_data', $f3->get('data')->allServices());
+	echo Template::instance()->render("templates/index.html");
+});
 $f3->route("GET|HEAD /tile/@z/@x/@y.png", function($f3, $params)
 {
 	$url = "https://tiles.maps.southampton.ac.uk/map/" . $params['z'] . "/" . $params['x'] . "/" . $params['y'] . ".png";
@@ -132,7 +138,7 @@ $f3->route("POST /search.@format", function($f3, $params)
 		print(json_encode($ret));
 	}
 });
-$f3->route("GET|HEAD *", function($f3, $params)
+$f3->route("GET|HEAD /", function($f3, $params)
 {
 	$f3->set('template', 'home.html');
 	echo Template::instance()->render("templates/index.html");

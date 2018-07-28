@@ -1,0 +1,40 @@
+    <div class="container">
+
+      <div class="jumbotron">
+        <h1>Bus Routes</h1>
+        <p class="lead">For reference, this is a complete list of bus services in Southampton that we know about.</p>
+      </div>
+
+	<div class="card-columns">
+
+	<repeat group="{{ @page_data }}" value="{{ @service }}">
+
+		<div class="card">
+			<div class="card-body">
+				<h5 class="card-title">{{ @service->operator()['name'] }} {{ @service->id }}</h5>
+				<p class="card-text">{{ @service->label }}</p>
+			</div>
+			<div class="list-group list-group-flush">
+
+			<repeat group="{{ @service->routes() }}" value="{{ @route }}">
+
+				<check if="{{ count(@route->stops()) > 0 }}"><true>
+
+				<a href="" class="list-group-item-action list-group-item list-group-item-dark">
+					{{ @route->label }}<br>
+					<small class="text-muted">{{ @route->stopCount() }} stops | {{ @route->direction }}</small>
+				</a>
+
+				</true></check>
+
+			</repeat>
+
+			</div>
+		</div>
+
+	</repeat>
+
+	</div>
+
+    </div>
+

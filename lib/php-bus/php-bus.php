@@ -47,6 +47,30 @@ class BusInfo
 	{
 		return new BusPlace($fhrsid, $this->url, $this->cachedir);
 	}
+
+	public function allServices()
+	{
+		$url = $this->url . "/dump/operators";
+		$data = json_decode(file_get_contents($url), true);
+		if(!(is_array($data))) { return(array()); }
+
+		$ret = array();
+		foreach($data as $operator)
+		{
+			$noc = $operator['id'];
+			$url = $this->url . "/operator/" . $noc;
+
+			$opdata = json_decode(file_get_contents($url), true);
+			if(!(is_array($opdata))) { continue; }
+			foreach($opdata['services'] as $serviceid)
+			{
+				$service = new BusService($serviceid, $noc, $this->url, $this->cachedir);
+				$ret[] = $service;
+			}
+		}
+
+		return($ret);
+	}
 }
 
 class BusStopCollection
@@ -355,6 +379,11 @@ class BusRoute
 			$ret[] = new BusStop($stop['id'], $this->url, $this->cachedir);
 		}
 		return($ret);
+	}
+
+	public function stopCount()
+	{
+		return(count($this->data['stops']));
 	}
 
 }
