@@ -4,3 +4,9 @@
 [submodule "lib/staticmaplite"]
 	path = lib/staticmaplite
 	url = git@github.com:dfacts/staticmaplite.git
+[submodule "lib/graphite"]
+	path = lib/graphite
+	url = git@github.com:cgutteridge/Graphite.git
+[submodule "lib/arc2"]
+	path = lib/arc2
+	url = git@github.com:semsol/arc2.git
