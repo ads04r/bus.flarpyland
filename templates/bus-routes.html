@@ -20,7 +20,7 @@
 
 				<check if="{{ count(@route->stops()) > 0 }}"><true>
 
-				<a href="" class="list-group-item-action list-group-item list-group-item-dark">
+				<a href="/bus-route/{{ @route->id }}.html" class="list-group-item-action list-group-item list-group-item-dark">
 					{{ @route->label }}<br>
 					<small class="text-muted">{{ @route->stopCount() }} stops | {{ @route->direction }}</small>
 				</a>

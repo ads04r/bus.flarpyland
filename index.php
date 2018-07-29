@@ -7,7 +7,8 @@ include_once("./lib/bus.soton/unilink.php");
 $f3 = require("./lib/fatfree/lib/base.php");
 $f3->set('page_load_start', microtime(true));
 $f3->set('DEBUG', 1);
-$f3->set('data', new UnilinkInfo("http://api.bus.southampton.ac.uk/", "./tmp"));
+$f3->set('TEMP', '/tmp/');
+$f3->set('data', new UnilinkInfo("http://api.bus.southampton.ac.uk/", "/tmp"));
 // $f3->set('ONERROR', function($f3){ errorHandler($f3); });
 
 $f3->route("GET|HEAD /bus-stop/@stopid.@format", function($f3, $params)

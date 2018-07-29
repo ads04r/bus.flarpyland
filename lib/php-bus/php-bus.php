@@ -11,10 +11,13 @@ class BusInfo
 		$this->cachedir = $cachedir;
 		if(is_dir($cachedir))
 		{
-			@mkdir(rtrim($cachedir, "/") . "/stops", 0755, true);
-			@mkdir(rtrim($cachedir, "/") . "/services", 0755, true);
-			@mkdir(rtrim($cachedir, "/") . "/routes", 0755, true);
+			@mkdir(rtrim($cachedir, "/") . "/areas", 0755, true);
+			@mkdir(rtrim($cachedir, "/") . "/places", 0755, true);
 			@mkdir(rtrim($cachedir, "/") . "/points", 0755, true);
+			@mkdir(rtrim($cachedir, "/") . "/routes", 0755, true);
+			@mkdir(rtrim($cachedir, "/") . "/services", 0755, true);
+			@mkdir(rtrim($cachedir, "/") . "/staticmap", 0755, true);
+			@mkdir(rtrim($cachedir, "/") . "/stops", 0755, true);
 		}
 	}
 
@@ -69,6 +72,8 @@ class BusInfo
 			}
 		}
 
+		usort($ret, function($a, $b) { return(strnatcmp($a->operator()['name'] . " ". $a->id, $b->operator()['name'] . " " . $b->id)); });
+
 		return($ret);
 	}
 }
@@ -112,6 +117,9 @@ class BusPlace
 	public $label;
 	public $address;
 
+	public $lat;
+	public $lon;
+
 	protected $cachedir;
 	protected $url;
 	protected $data;
@@ -142,7 +150,10 @@ class BusPlace
 
 		$this->label = $data['label'];
 		$this->address = $data['address'];
+		$this->lat = $data['geo']['latitude'];
+		$this->lon = $data['geo']['longitude'];
 		$this->data = $data;
+
 	}
 
 	public function dump()
