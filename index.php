@@ -65,6 +65,12 @@ $f3->route("GET|HEAD /area/@areaid.html", function($f3, $params)
 	$f3->set('page_data', $f3->get('data')->area($params['areaid']));
 	echo Template::instance()->render("templates/index.html");
 });
+$f3->route("GET|HEAD /area-publicdisplay/@areaid.html", function($f3, $params)
+{
+	$f3->set('template', 'bus-area-display.html');
+	$f3->set('page_data', $f3->get('data')->area($params['areaid']));
+	echo Template::instance()->render("templates/index-display.html");
+});
 $f3->route("GET|HEAD /bus-routes.html", function($f3)
 {
 	$f3->set('template', 'bus-routes.html');
