@@ -175,12 +175,14 @@ class UnilinkInfo extends BusInfo
 
 	public function search($query)
 	{
+		$stopwords = array("the", "road", "a", "inn");
 		$terms = explode(" ", preg_replace("/ +/", " ", preg_replace("/[^a-z0-9]/", " ", strtolower($query))));
 		$data = json_decode(file_get_contents("search/index.json"), true);
 		$retix = array();
 		$ret = array();
 		foreach($terms as $term)
 		{
+			if(in_array($term, $stopwords)) { continue; }
 			if(!(array_key_exists($term, $data['index']))) { continue; }
 			foreach($data['index'][$term] as $i)
 			{
