@@ -41,6 +41,13 @@ $f3->route("GET|HEAD /bus-stop/@stopid.png", function($f3, $params)
 	header("Content-type: image/png");
 	print($png);
 });
+$f3->route("GET|HEAD /bus-stop-publicdisplay/@stopid.html", function($f3, $params)
+{
+	$f3->set('template', 'bus-stop-display.html');
+	$f3->set('page_data', $f3->get('data')->stop($params['stopid']));
+	$f3->set('stop_data', get_upcoming_buses($params['stopid']));
+	echo Template::instance()->render("templates/index-display.html");
+});
 $f3->route("GET|HEAD /bus-service/@operatorid/@servicename.html", function($f3, $params)
 {
 	$f3->set('template', 'bus-service.html');
