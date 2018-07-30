@@ -8,7 +8,7 @@
 
 	<div class="row">
 
-		<div class="col-md-12 col-lg-6">
+		<div id="update-timer" class="col-md-12 col-lg-6">
 
 			<repeat group="{{ @page_data->buses() }}" value="{{ @bus }}">
 
@@ -23,7 +23,7 @@
 
 				<a href="/bus-stop/{{ @stop['stop']->id }}.html" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
 					<span>{{ @stop['stop']->label }}</span>
-					<span class="badge badge-primary badge-pill">{{ @stop['time'] }}</span>
+					<span><i class="fa fa-calendar"></i>&nbsp;<span class="badge badge-primary badge-pill">{{ @stop['time'] }}</span></span>
 				</a>
 
 				</repeat>
