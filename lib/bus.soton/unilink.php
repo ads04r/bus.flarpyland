@@ -172,6 +172,50 @@ class UnilinkInfo extends BusInfo
 		}
 		return new BusService($serviceid, $operatorid, $this->url, $this->cachedir);
 	}
+
+	public function search($query)
+	{
+		$terms = explode(" ", preg_replace("/ +/", " ", preg_replace("/[^a-z0-9]/", " ", strtolower($query))));
+		$data = json_decode(file_get_contents("search/index.json"), true);
+		$retix = array();
+		$ret = array();
+		foreach($terms as $term)
+		{
+			if(!(array_key_exists($term, $data['index']))) { continue; }
+			foreach($data['index'][$term] as $i)
+			{
+				if(in_array($i, $retix)) { continue; }
+				$retix[] = $i;
+			}
+		}
+		foreach($retix as $i)
+		{
+			$newitem = array();
+			$item = $data['content'][$i];
+			$newitem['label'] = $item['label'];
+			$newitem['query'] = $item['uri'];
+			$newitem['result'] = $item['stops'];
+			$newitem['type'] = 'uri';
+			$newitem['diff'] = abs(levenshtein(strtolower($query), strtolower($item['label'])));
+			$ret[] = $newitem;
+		}
+
+		if(count($ret) == 0) { return(parent::search($query)); }
+
+		usort($ret, function($a, $b)
+		{
+			if($a['diff'] < $b['diff']) { return -1; }
+			if($a['diff'] > $b['diff']) { return 1; }
+			return 0;
+		});
+
+		$ret = array_slice($ret, 0, 10);
+
+		if($ret[0]['diff'] == 0) { $ret = array_slice($ret, 0, 1); }
+
+		return($ret);
+
+	}
 }
 
 function curl_get( $url ) // A nicer version of file_get_contents. We can customise the connect timeout and add a nicer user agent this way.

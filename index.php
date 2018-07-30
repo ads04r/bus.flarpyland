@@ -75,69 +75,11 @@ $f3->route("GET|HEAD /tile/@z/@x/@y.png", function($f3, $params)
 });
 $f3->route("POST /search.@format", function($f3, $params)
 {
-	$json = json_encode(array("search"=>$_POST['bus_search'], "type"=>""));
-	$ch = curl_init();
-	curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-	curl_setopt($ch, CURLOPT_URL, "http://api.bus.southampton.ac.uk/resolve");
-	curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-		"Content-Type: application/json",
-		"Content-Length: " . strlen($json))
-	);
-	$ret = json_decode(curl_exec($ch), true);
-	curl_close($ch);
+	$ret = $f3->get('data')->search($_POST['bus_search']);
 
-	if(!(is_array($ret))) { $ret = array(); }
-	$url = "";
+	header("Content-type: application/json");
+	print(json_encode($ret));
 
-	if(count($ret) == 1)
-	{
-		$item = $ret[0];
-		$type = $item['type'];
-		$id = $item['query'];
-		$stops = $item['result'];
-		$label = $item['label'];
-
-		if(strcmp($type, "stop") == 0) { $url = "/bus-stop/" . $id . ".html"; }
-		if(strcmp($type, "fhrs") == 0) { $url = "/place/" . $id . ".html"; }
-
-		if((strcmp($type, "street") == 0) || (strcmp($type, "stop-area") == 0))
-		{
-			$stopcollection = $f3->get('data')->stopCollection($label);
-			foreach($stops as $stop)
-			{
-				$stopcollection->addStop($stop);
-			}
-			$f3->set('template', 'bus-stop-collection.html');
-			$f3->set('page_data', $stopcollection);
-			echo Template::instance()->render("templates/index.html");
-			return;
-		}
-
-		if(strcmp($type, "postcode") == 0)
-		{
-			$stopcollection = $f3->get('data')->stopCollection(preg_replace("/[^0-9A-Z]/", "", strtoupper($item['query'])));
-			foreach($stops as $stop)
-			{
-				$stopcollection->addStop($stop);
-			}
-			$f3->set('template', 'postcode.html');
-			$f3->set('page_data', $stopcollection);
-			echo Template::instance()->render("templates/index.html");
-			return;
-		}
-	}
-
-	if(strlen($url) > 0)
-	{
-		$f3->reroute($url);
-	}
-	else
-	{
-		header("Content-type: application/json");
-		print(json_encode($ret));
-	}
 });
 $f3->route("GET|HEAD /", function($f3, $params)
 {
