@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>{{ @page_data->label }} | Southampton Bus Information</title>
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1" />
+<meta http-equiv="Content-Language" content="English" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="shortcut icon" href="/favicon.png" />
+
+    <script src="/script/jquery/jquery.min.js"></script>
+    <script src="/script/bus.soton.js"></script>
+
+</head>
+
+<body style="overflow: hidden;">
+
+<div id="background">
+
+<div id="main" style="padding-left: 0px;">
+
+<div class="content">
+
+
+<div class="bus_timetable" id="{{ @page_data->id }}"><span class='bus_loading'>Loading data...</span><noscript><p>Please enable Javascript to see the live times.</p></noscript></div>
+
+
+
+</div>
+</div>
+</div>
+</body>
+</html>
+

@@ -4,19 +4,20 @@
 	<div class="row">
 
 		<div class="col-md-12 col-lg-6">
+			<div class="card"><div class="card-body"><div id="osm_route_map" style="width: 100%; min-height: 320px;"></div></div></div>
+
+		</div>
+
+		<div class="col-md-12 col-lg-6">
 			<div class="card" id="update-timer"><ul class="list-group">
 
 				<repeat group="{{ @stop_data }}" value="{{ @bus }}">
-					<li style="font-size: 1.6em;" class="list-group-item d-flex justify-content-between align-items-center"><span>{{ @bus['name'] }}</span><span>To {{ @bus['dest'] }}</span><span><check if="{{ @bus['vehicle'] }}"><false><i class="fa fa-calendar"></i></false></check>&nbsp;<span class="badge badge-primary badge-pill">{{ @bus['time'] }}</span></span></li>
+					<li style="font-size: 1.6em; font-weight: bold;" class="list-group-item d-flex justify-content-between align-items-center"><span>{{ @bus['name'] }}</span><span>To {{ @bus['dest'] }}</span><span><check if="{{ @bus['vehicle'] }}"><false><i class="fa fa-calendar"></i></false></check>&nbsp;<span class="badge badge-primary badge-pill">{{ @bus['time'] }}</span></span></li>
 				</repeat>
 			
 			</ul></div>
 		</div>
 
-		<div class="col-md-12 col-lg-6">
-			<div class="card"><div class="card-body"><div id="osm_route_map" style="width: 100%; min-height: 320px;"></div></div></div>
-
-		</div>
 	</div>
 
 <script language="JavaScript"><!--//
