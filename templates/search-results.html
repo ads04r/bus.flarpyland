@@ -1,0 +1,66 @@
+    <div class="container">
+
+      <div class="jumbotron">
+        <h1>Search results</h1>
+        <p class="lead">Search results for <em>{{ @page_search_query }}</em></p>
+      </div>
+
+<check if="{{ count(@page_data) == 0 }}">
+
+	<true>
+		<div class="card">
+			<div class="card-body">
+				<p>Sorry, no search results found.</p>
+			</div>
+		</div>
+	</true>
+
+	<false>
+
+		<div class="list-group">
+		<repeat group="{{ @page_data }}" value="{{ @result }}">
+
+		<check if="{{ @result['type'] == 'stop' }}"><true>
+
+			<a href="/bus-stop/{{ @result['query'] }}.html" class="list-group-item list-group-item-action">
+				<h5>{{ @result['label'] }}</h5>
+				<p class="card-text"><small class="text-muted">Bus stop</small></p>
+			</a>
+
+		</true></check>
+
+		<check if="{{ @result['type'] == 'fhrs' }}"><true>
+
+			<a href="/place/{{ @result['query'] }}.html" class="list-group-item list-group-item-action">
+				<h5>{{ @result['label'] }}</h5>
+				<p class="card-text"><small class="text-muted">Food / drink establishment</small></p>
+			</a>
+
+		</true></check>
+
+		</repeat>
+		<repeat group="{{ @page_data }}" value="{{ @result }}">
+
+		<check if="{{ ((@result['type'] == 'stop') || (@result['type'] == 'fhrs')) }}"><false>
+
+			<div class="list-group-item">
+				<h5>{{ @result['label'] }}</h5>
+				<p class="card-text">{{ count(@result['result']) }} stops <check if="{{ @result['type'] == 'street' }}"><true>on this street</true><false>in this area</false></check></p>
+				<div class="d-flex align-content-center flex-wrap">
+					<repeat group="{{ @result['result'] }}" value="{{ @stop }}">
+						<div class="p-2"><a href="/bus-stop/{{ @stop->id }}.html" class="btn btn-light">{{ @stop->label }}<br><small class="text-muted">{{ @stop->address }}</small></a></div>
+					</repeat>
+				</div>
+			</div>
+
+		</false></check>
+
+		</repeat>
+		</div>
+
+	</false>
+
+</check>
+
+    </div>
+

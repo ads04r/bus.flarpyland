@@ -48,7 +48,10 @@
 			<form class="form-inline mt-2 mt-md-0" action="/search.html" method="POST">
 			<div class="d-flex flex-row-reverse">
 				<div class="align-self-center"><button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button></div>
-				<div class="align-self-center"><input class="form-control mr-sm-2" type="text" placeholder="Search" id="bus_search" name="bus_search"></div>
+				<check if="{{ @page_search_query }}">
+				<true><div class="align-self-center"><input class="form-control mr-sm-2" type="text" placeholder="Search" id="bus_search" name="bus_search" value="{{ @page_search_query }}"></div></true>
+				<false><div class="align-self-center"><input class="form-control mr-sm-2" type="text" placeholder="Search" id="bus_search" name="bus_search"></div></false>
+				</check>
 			</div>
 			</form>
 		</div>

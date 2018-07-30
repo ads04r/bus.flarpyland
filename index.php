@@ -6,7 +6,12 @@ include_once("./lib/php-bus/php-bus.php");
 include_once("./lib/bus.soton/unilink.php");
 $f3 = require("./lib/fatfree/lib/base.php");
 $f3->set('page_load_start', microtime(true));
-$f3->set('DEBUG', 1);
+if(preg_match("/\\.dev\\./", $_SERVER['HTTP_HOST']) > 0)
+{
+	$f3->set('DEBUG', TRUE);
+} else {
+	$f3->set('DEBUG', FALSE);
+}
 $f3->set('TEMP', '/tmp/');
 $f3->set('data', new UnilinkInfo("http://api.bus.southampton.ac.uk/", "/tmp"));
 // $f3->set('ONERROR', function($f3){ errorHandler($f3); });
@@ -77,15 +82,68 @@ $f3->route("POST /search.@format", function($f3, $params)
 {
 	$ret = $f3->get('data')->search($_POST['bus_search']);
 
-	header("Content-type: application/json");
-	print(json_encode($ret));
+	if(count($ret) == 1)
+	{
+		$item = $ret[0];
+		$type = $item['type'];
+		$id = $item['query'];
+		$stops = $item['result'];
+		$label = $item['label'];
 
+		if(strcmp($type, "stop") == 0) { $f3->reroute("/bus-stop/" . $id . ".html"); }
+
+		if((strcmp($type, "street") == 0) || (strcmp($type, "stop-area") == 0))
+		{
+			$stopcollection = $f3->get('data')->stopCollection($label);
+			foreach($stops as $stop)
+			{
+				$stopcollection->addStop($stop);
+			}
+			$f3->set('template', 'bus-stop-collection.html');
+			$f3->set('page_data', $stopcollection);
+			echo Template::instance()->render("templates/index.html");
+			return;
+		}
+
+		if(strcmp($type, "postcode") == 0)
+		{
+			$stopcollection = $f3->get('data')->stopCollection(preg_replace("/[^0-9A-Z]/", "", strtoupper($item['query'])));
+			foreach($stops as $stop)
+			{
+				$stopcollection->addStop($stop);
+			}
+			$f3->set('template', 'postcode.html');
+			$f3->set('page_data', $stopcollection);
+			echo Template::instance()->render("templates/index.html");
+			return;
+		}
+	}
+
+	foreach($ret as &$item)
+	{
+		if(strcmp($item['type'], "stop") == 0) { unset($item['result']); continue; }
+		if(strcmp($item['type'], "fhrs") == 0) { unset($item['result']); continue; }
+
+		$stops = array();
+		foreach($item['result'] as $stop)
+		{
+			$stops[] = $f3->get('data')->stop($stop);
+		}
+		$item['result'] = $stops;
+	}
+
+	$f3->set('template', 'search-results.html');
+	$f3->set('page_search_query', $_POST['bus_search']);
+	$f3->set('page_data', $ret);
+	echo Template::instance()->render("templates/index.html");
 });
 $f3->route("GET|HEAD /", function($f3, $params)
 {
 	$f3->set('template', 'home.html');
 	echo Template::instance()->render("templates/index.html");
 });
+
+$f3->route("GET /U@service", function($f3, $params) { $f3->reroute("/bus-service/unil/U" . $params['service'] . ".html"); });
 
 // Now redirect all the old 'mobile' pages to their nice responsive equivalents
 

@@ -175,6 +175,13 @@ class UnilinkInfo extends BusInfo
 
 	public function search($query)
 	{
+		function lev_diff_fn($a, $b)
+		{
+			if($a['diff'] < $b['diff']) { return -1; }
+			if($a['diff'] > $b['diff']) { return 1; }
+			return 0;
+		}
+
 		$stopwords = array("the", "road", "a", "inn");
 		$terms = explode(" ", preg_replace("/ +/", " ", preg_replace("/[^a-z0-9]/", " ", strtolower($query))));
 		$data = json_decode(file_get_contents("search/index.json"), true);
@@ -204,15 +211,23 @@ class UnilinkInfo extends BusInfo
 
 		if(count($ret) == 0) { return(parent::search($query)); }
 
-		usort($ret, function($a, $b)
-		{
-			if($a['diff'] < $b['diff']) { return -1; }
-			if($a['diff'] > $b['diff']) { return 1; }
-			return 0;
-		});
+		usort($ret, 'lev_diff_fn');
 
 		$ret = array_slice($ret, 0, 10);
+		if($ret[0]['diff'] == 0) { $ret = array_slice($ret, 0, 1); }
 
+		if($ret[0]['diff'] < 5) { return($ret); }
+
+		$ret = array_merge($ret, parent::search($query));
+		foreach($ret as &$item)
+		{
+			if(array_key_exists("diff", $item)) { continue; }
+			$item['diff'] = abs(levenshtein(strtolower($query), strtolower($item['label'])));
+		}
+
+		usort($ret, 'lev_diff_fn');
+
+		$ret = array_slice($ret, 0, 10);
 		if($ret[0]['diff'] == 0) { $ret = array_slice($ret, 0, 1); }
 
 		return($ret);
