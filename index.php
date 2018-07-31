@@ -16,7 +16,7 @@ if(preg_match("/\\.dev\\./", $_SERVER['HTTP_HOST']) > 0)
 	$f3->set('DEBUG', FALSE);
 }
 $f3->set('TEMP', '/tmp/');
-$f3->set('data', new UnilinkInfo("http://api.bus.southampton.ac.uk/", "/tmp"));
+$f3->set('data', new UnilinkInfo("https://api.bus.southampton.ac.uk/", "/tmp"));
 // $f3->set('ONERROR', function($f3){ errorHandler($f3); });
 
 $f3->route("GET|HEAD /bus-stop/@stopid.html", function($f3, $params)

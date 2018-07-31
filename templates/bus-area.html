@@ -10,6 +10,8 @@
 
 			<repeat group="{{ @page_data->buses() }}" value="{{ @bus }}">
 
+			<check if="{{ @bus['route']->label }}"><true>
+
 			<div class="list-group">
 
 				<a href="/bus-route/{{ @bus['route']->id }}.html" class="list-group-item list-group-item-action list-group-item-dark d-flex justify-content-between align-items-center">
@@ -29,6 +31,8 @@
 			</div>
 
 			<br>
+
+			</true></check>
 
 			</repeat>
 

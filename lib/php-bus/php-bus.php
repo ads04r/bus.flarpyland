@@ -257,12 +257,16 @@ class BusArea
 		$this->id = $areaid;
 
 		$cache_file = rtrim($cachedir, "/") . "/areas/" . $areaid . ".json";
+		if(!(file_exists($cache_file))) { $cache_file = "./tmp/areas/" . $areaid . ".json"; }
 		$data = array();
 		if(file_exists($cache_file)) { $data = json_decode(file_get_contents($cache_file), true); }
 		if(!(is_array($data))) { $data = array(); }
+
 		if(count($data) == 0)
 		{
-			$data = json_decode(file_get_contents(rtrim($url, "/") . "/area/" . $areaid), true);
+			$file = rtrim($url, "/") . "/area/" . $areaid;
+			$data = json_decode(file_get_contents($file), true);
+
 			if(!(is_array($data))) { $data = array(); }
 			$data['stops'] = json_decode(file_get_contents(rtrim($url, "/") . "/area/" . $areaid . "/stops"), true);
 			if(!(is_array($data['stops']))) { $data['stops'] = array(); }
