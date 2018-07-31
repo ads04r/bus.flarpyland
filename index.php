@@ -2,8 +2,11 @@
 
 date_default_timezone_set("Europe/London");
 
+include_once("./lib/arc2/ARC2.php");
+include_once("./lib/graphite/Graphite.php");
 include_once("./lib/php-bus/php-bus.php");
 include_once("./lib/bus.soton/unilink.php");
+include_once("./lib/bus.soton/opendata.php");
 $f3 = require("./lib/fatfree/lib/base.php");
 $f3->set('page_load_start', microtime(true));
 if(preg_match("/\\.dev\\./", $_SERVER['HTTP_HOST']) > 0)
@@ -16,13 +19,13 @@ $f3->set('TEMP', '/tmp/');
 $f3->set('data', new UnilinkInfo("http://api.bus.southampton.ac.uk/", "/tmp"));
 // $f3->set('ONERROR', function($f3){ errorHandler($f3); });
 
-$f3->route("GET|HEAD /bus-stop/@stopid.@format", function($f3, $params)
+$f3->route("GET|HEAD /bus-stop/@stopid.html", function($f3, $params)
 {
 	$f3->set('template', 'bus-stop.html');
 	$f3->set('page_data', $f3->get('data')->stop($params['stopid']));
 	$f3->set('stop_data', get_upcoming_buses($params['stopid']));
-	if(strcmp($params['format'], "html") == 0) { echo Template::instance()->render("templates/index.html"); }
-	if(strcmp($params['format'], "json") == 0) { print(json_encode($f3->get('stop_data'), JSON_PRETTY_PRINT)); }
+	echo Template::instance()->render("templates/index.html");
+	//if(strcmp($params['format'], "json") == 0) { print(json_encode($f3->get('stop_data'), JSON_PRETTY_PRINT)); }
 });
 $f3->route("GET|HEAD /bus-stop/@stopid.json", function($f3, $params)
 {
@@ -40,6 +43,20 @@ $f3->route("GET|HEAD /bus-stop/@stopid.png", function($f3, $params)
 	$png = file_get_contents($url);
 	header("Content-type: image/png");
 	print($png);
+});
+$f3->route("GET|HEAD /bus-stop/@stopid.ttl", function($f3, $params)
+{
+	$stop = $f3->get('data')->stop($params['stopid']);
+	$g = make_stop_graph($stop);
+	header("Content-type: application/turtle");
+	print($g->serialize("Turtle"));
+});
+$f3->route("GET|HEAD /bus-stop/@stopid.rdf", function($f3, $params)
+{
+	$stop = $f3->get('data')->stop($params['stopid']);
+	$g = make_stop_graph($stop);
+	header("Content-type: application/rdf+xml");
+	print($g->serialize("RDFXML"));
 });
 $f3->route("GET|HEAD /bus-stop-publicdisplay/@stopid.html", function($f3, $params)
 {
@@ -66,6 +83,20 @@ $f3->route("GET|HEAD /bus-route/@routeid.html", function($f3, $params)
 	$f3->set('template', 'bus-route.html');
 	$f3->set('page_data', $f3->get('data')->route($params['routeid']));
 	echo Template::instance()->render("templates/index.html");
+});
+$f3->route("GET|HEAD /bus-route/@routeid.ttl", function($f3, $params)
+{
+	$route = $f3->get('data')->route($params['routeid']);
+	$g = make_route_graph($route);
+	header("Content-type: application/turtle");
+	print($g->serialize("Turtle"));
+});
+$f3->route("GET|HEAD /bus-route/@routeid.rdf", function($f3, $params)
+{
+	$route = $f3->get('data')->route($params['routeid']);
+	$g = make_route_graph($route);
+	header("Content-type: application/rdf+xml");
+	print($g->serialize("RDFXML"));
 });
 $f3->route("GET|HEAD /place/@fhrs.html", function($f3, $params)
 {
