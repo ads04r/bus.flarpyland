@@ -203,4 +203,17 @@ $f3->route("GET /bus-route-mobile/@routecode.@format", function($f3, $params) { 
 $f3->route("GET /bus-stop-mobile/@stopcode.@format", function($f3, $params) { $f3->reroute("/bus-stop/" . $params['stopcode'] . "." . $params['format']); });
 $f3->route("GET /area-mobile/@areaid.@format", function($f3, $params) { $f3->reroute("/area/" . $params['areaid'] . "." . $params['format']); });
 
+$f3->route("GET *", function($f3, $params)
+{
+	$url = $params["*"];
+	if(preg_match("|^/([^\\.]+)$|", $url) > 0)
+	{
+		$f3->reroute($url . ".html");
+	}
+	else
+	{
+		$f3->error(404);
+	}
+});
+
 $f3->run();
