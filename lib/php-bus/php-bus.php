@@ -550,7 +550,7 @@ class BusService
 	{
 		$url = $this->url;
 		$data = array();
-		$data = json_decode(file_get_contents(rtrim($url, "/") . "/service/" . $operator . "/" . $serviceid), true);
+		$data = json_decode(file_get_contents(rtrim($url, "/") . "/service/" . $operator . "/" . urlencode($serviceid)), true);
 		if(!(is_array($data))) { $data = array(); }
 		if(array_key_exists("routes", $data))
 		{
