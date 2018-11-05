@@ -15,8 +15,8 @@ if(preg_match("/\\.dev\\./", $_SERVER['HTTP_HOST']) > 0)
 } else {
 	$f3->set('DEBUG', FALSE);
 }
-$f3->set('TEMP', '/tmp/');
-$f3->set('data', new UnilinkInfo("https://api.bus.southampton.ac.uk/", "/tmp"));
+$f3->set('TEMP', './tmp/');
+$f3->set('data', new UnilinkInfo("https://api.bus.flarpyland.com/", "./tmp"));
 // $f3->set('ONERROR', function($f3){ errorHandler($f3); });
 
 $f3->route("GET|HEAD /bus-stop/@stopid.html", function($f3, $params)
@@ -39,7 +39,7 @@ $f3->route("GET|HEAD /bus-stop/@stopid.json", function($f3, $params)
 $f3->route("GET|HEAD /bus-stop/@stopid.png", function($f3, $params)
 {
 	$stop = $f3->get('data')->stop($params['stopid']);
-	$url = "http://bus.flarpyland.com/lib/staticmaplite/staticmap.php?center=" . $stop->latitude . "," . $stop->longitude . "&zoom=16&size=100x100";
+	$url = "http://bus.flarpyland.com/lib/staticmaplite/staticmap.php?maptype=watercolor&center=" . $stop->latitude . "," . $stop->longitude . "&zoom=15&size=100x100";
 	$png = file_get_contents($url);
 	header("Content-type: image/png");
 	print($png);
@@ -124,7 +124,7 @@ $f3->route("GET|HEAD /bus-routes.html", function($f3)
 });
 $f3->route("GET|HEAD /tile/@z/@x/@y.png", function($f3, $params)
 {
-	$url = "https://tiles.maps.southampton.ac.uk/map/" . $params['z'] . "/" . $params['x'] . "/" . $params['y'] . ".png";
+	$url = "http://a.tile.stamen.com/watercolor/" . $params['z'] . "/" . $params['x'] . "/" . $params['y'] . ".png";
 	$png = file_get_contents($url);
 	header("Content-type: image/png");
 	echo $png;

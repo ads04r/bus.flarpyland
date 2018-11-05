@@ -49,7 +49,7 @@ var icon = L.icon({
 });
 
 L.tileLayer('/tile/{z}/{x}/{y}.png', {
-	attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, augmented with <a href="http://data.southampton.ac.uk/">University of Southampton Open Data</a> | <a href="https://maps.southampton.ac.uk/#19/{{ @page_data->latitude }}/{{ @page_data->longitude }}/nojump,bus" target="_top">View bigger map on maps.soton</a>',
+	attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>.',
 	maxZoom: 19
 }).addTo(map);
 var marker = L.marker([{{ @page_data->latitude }}, {{ @page_data->longitude }}], {icon: icon}).addTo(map);

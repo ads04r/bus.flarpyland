@@ -12,10 +12,7 @@ body
 
 .jumbotron
 {
-	background-image: url(../graphics/uos-logo.png);
-	background-size: 20% auto;
-	background-position: 95% 1.5em;
-	background-repeat: no-repeat;
+	background-color: rgba(255, 255, 255, 0.5);
 }
 
 .jumbotron h1 { margin-top: 1em; }
@@ -23,6 +20,18 @@ body
 .card
 {
 	margin-bottom: 1em;
+	background-color: rgba(255, 255, 255, 0.5);
+}
+
+.list-group-item
+{
+	background-color: rgba(255, 255, 255, 0.5);
+}
+
+.list-group-item-dark, .list-group-item-dark:hover
+{
+	background-color: rgba(0, 0, 0, 0.5) !important;
+	color: #FFFFFF !important;
 }
 
 @media screen and (max-width: 489px)

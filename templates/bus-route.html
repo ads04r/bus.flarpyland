@@ -38,11 +38,11 @@
 <script language="JavaScript"><!--//
 
 var map = L.map('osm_route_map');
-L.tileLayer('/tile/{z}/{x}/{y}.png', {
-	attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, augmented with <a href="http://data.southampton.ac.uk/">University of Southampton Open Data</a>.',
+L.tileLayer('http://a.tile.stamen.com/watercolor/{z}/{x}/{y}.jpg', {
+	attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>.',
 	maxZoom: 19
 }).addTo(map);
-var polyline = L.polyline({{ json_encode( @page_data->points() ) }}, {color: '#FF0000', weight:5, clickable:false}).addTo(map);
+var polyline = L.polyline({{ json_encode( @page_data->points() ) }}, {color: '#000000', weight:5, clickable:false}).addTo(map);
 map.fitBounds(polyline.getBounds());
 
 //--></script>
