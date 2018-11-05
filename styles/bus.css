@@ -1,7 +1,5 @@
 body
 {
-	padding-top: 5em;
-
 	background-image: url(../graphics/background.jpg);
 	background-size: cover;
 	background-position: top center;
@@ -34,7 +32,8 @@ body
 	color: #FFFFFF !important;
 }
 
-@media screen and (max-width: 489px)
+@media screen and (max-width: 525px)
 {
 	.container { margin-top: 3em; }
 }
+

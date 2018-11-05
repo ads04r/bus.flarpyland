@@ -48,7 +48,15 @@
 				<p class="card-text">{{ count(@result['result']) }} stops <check if="{{ @result['type'] == 'street' }}"><true>on this street</true><false>in this area</false></check></p>
 				<div class="d-flex align-content-center flex-wrap">
 					<repeat group="{{ @result['result'] }}" value="{{ @stop }}">
-						<div class="p-2"><a href="/bus-stop/{{ @stop->id }}.html" class="btn btn-light">{{ @stop->label }}<br><small class="text-muted">{{ @stop->address }}</small></a></div>
+						<div class="p-2">
+							<a href="/bus-stop/{{ @stop->id }}.html" class="btn btn-light">
+							{{ @stop->label }}<br>
+							<small class="text-muted">{{ @stop->address }}</small><br>
+							<small><repeat group="{{ @stop->services() }}" value="{{ @service }}">
+								<span class="badge">{{ @service['service'] }}</span>
+							</repeat></small>
+							</a>
+						</div>
 					</repeat>
 				</div>
 			</div>

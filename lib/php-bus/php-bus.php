@@ -507,6 +507,19 @@ class BusStop
 		return($ret);
 	}
 
+	public function services()
+	{
+		$url = rtrim($this->url, "/") . "/stop/" . $this->id . "/services";
+
+		$ret = array();
+		foreach(json_decode(file_get_contents($url), true) as $service)
+		{
+			$ret[] = $service;
+		}
+
+		return($ret);
+	}
+
 	public function buses() { return array(); }
 
 	public function dump()
